@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+/* Smooth Scrolling & Custom Scrollbar */
+html {
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #FCF8F5;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #AA9174;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #93755A;
+}
+
+/* Custom Animation Keyframes */
+@keyframes pendulumSway {
+    0%, 100% {
+        transform: rotate(-6deg);
+    }
+    50% {
+        transform: rotate(6deg);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-12px) rotate(2deg);
+    }
+}
+
+@keyframes garmentDrop {
+    0% {
+        transform: translateY(-50px) scale(0.9);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(10px) scale(1.02);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Animation Classes */
+.animate-pendulum {
+    animation: pendulumSway 4.5s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+.animate-float {
+    animation: float 3.5s ease-in-out infinite;
+}
+
+.animate-garment-drop {
+    animation: garmentDrop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Filter Button Active State Styling */
+.filter-btn.active {
+    background-color: #0B0906;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(11, 9, 6, 0.15);
+}
+
+.filter-btn:not(.active) {
+    background-color: transparent;
+    color: #695246;
+}
+
+.filter-btn:not(.active):hover {
+    background-color: rgba(170, 145, 116, 0.12);
+}
+
+/* Glassmorphism Accents */
+.glass-panel {
+    background: rgba(244, 236, 228, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(170, 145, 116, 0.2);
+}
