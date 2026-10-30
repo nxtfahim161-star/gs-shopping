@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gs. Shopping | Luxury Fashion & Haute Couture</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@lucide/web"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#0B0906',
+                            card: '#16130F',
+                            accent: '#AA9174',
+                            dark: '#0B0906',
+                            muted: '#A39280',
+                            brown: '#93755A',
+                            soft: '#D4C5B9'
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- GSAP & Three.js Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-brand-bg text-brand-soft font-sans overflow-x-hidden selection:bg-brand-accent selection:text-white">
+
+    <!-- Ambient Kinetic Background -->
+    <canvas id="ambientCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-bg/90 backdrop-blur-md border-b border-brand-accent/20 transition-all duration-300">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-6">
+                <a href="#" class="font-cinzel text-xl sm:text-2xl font-black tracking-widest text-white flex items-center gap-1.5 brand-glow transition-all">
+                    GS<span class="text-brand-accent font-sans text-[10px] tracking-normal font-bold px-1.5 py-0.5 rounded bg-brand-accent/15 border border-brand-accent/30">SHOPPING</span>
+                </a>
+            </div>
+
+            <!-- Search Bar in Header -->
+            <div class="flex-1 max-w-md mx-4">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-brand-muted">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Search kinetic couture, jackets, trousers..." class="w-full pl-10 pr-4 py-2 bg-brand-card border border-brand-accent/30 rounded-full text-sm text-white placeholder-brand-muted/60 focus:outline-none focus:border-brand-accent transition-all shadow-inner">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button id="cartBtn" class="relative p-2.5 rounded-full bg-brand-card hover:bg-brand-accent/20 text-white transition-all transform hover:scale-105 active:scale-95 border border-brand-accent/30">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-brand-accent text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-0 transition-all duration-300 shadow-md">0</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Interactive Discount Carousel (Search Bar-এর নিচে ছবি ও অফার সহ) -->
+    <div class="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-20">
+        <div class="relative overflow-hidden rounded-3xl bg-brand-card border border-brand-accent/30 p-6 sm:p-8 shadow-2xl min-h-[180px] flex flex-col justify-between group">
+            
+            <!-- Dynamic Slide Content Container -->
+            <div id="discountSlideContainer" class="transition-all duration-500 ease-in-out transform"></div>
+
+            <!-- Carousel Pagination Dots -->
+            <div id="sliderDotsContainer" class="flex items-center justify-center gap-2 mt-4"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen pt-12 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-card border border-brand-accent/30 text-brand-muted text-xs font-semibold tracking-wide uppercase shadow-md">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-accent"></i>
+                    Interactive Couture Experience
+                </div>
+                <h1 class="font-cinzel text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight text-white">
+                    Elegance In <br>
+                    <span class="italic font-normal text-brand-accent">Kinetic Motion</span>
+                </h1>
+                <p class="text-brand-muted text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
+                    High-fashion kinetic digital store combining gravity motion physics with luxury apparel.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#studio" class="w-full sm:w-auto px-8 py-4 bg-brand-accent text-white rounded-full font-medium hover:bg-brand-brown transition-all transform hover:-translate-y-1 shadow-xl flex items-center justify-center gap-2 group">
+                        Enter Outfit Studio
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#collections" class="w-full sm:w-auto px-8 py-4 bg-brand-card text-white border border-brand-accent/30 rounded-full font-medium hover:bg-brand-accent/10 transition-all text-center">
+                        Explore Runway
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 relative flex justify-center">
+                <!-- Rotating Kinetic Badge (ঘুরন্ত লোগো) -->
+                <div class="absolute -top-8 -right-4 sm:-right-8 z-30 pointer-events-none">
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center animate-spin-slow">
+                        <svg class="w-full h-full text-brand-accent opacity-80" viewBox="0 0 100 100">
+                            <path id="textPath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+                            <text class="text-[9.5px] font-bold uppercase tracking-widest fill-brand-accent font-cinzel">
+                                <textPath href="#textPath">GS. SHOPPING • HAUTE COUTURE •</textPath>
+                            </text>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-full bg-brand-accent/20 border border-brand-accent flex items-center justify-center backdrop-blur-md">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-brand-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full max-w-md aspect-[3/4] rounded-3xl overflow-hidden bg-brand-card border border-brand-accent/30 shadow-2xl p-6 flex flex-col justify-between group">
+                    <div id="heroHeroGarment" class="relative w-full h-full flex items-center justify-center cursor-pointer">
+                        <img id="heroImage" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80" alt="High Couture" class="w-full h-full object-cover rounded-2xl shadow-inner transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent rounded-2xl"></div>
+                        <div class="absolute bottom-6 left-6 right-6 text-white">
+                            <span class="text-xs uppercase tracking-widest text-brand-accent font-semibold">Featured Piece</span>
+                            <h3 class="font-cinzel text-2xl font-bold mt-0.5">Silk Draped Overcoat</h3>
+                            <p class="text-sm font-light text-brand-muted mt-1">Tap image to trigger Garment Gravity Physics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        <!-- Interactive Outfit Studio Section -->
+    <section id="studio" class="py-20 px-4 sm:px-6 lg:px-8 bg-brand-card/50 border-y border-brand-accent/20 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-accent">Interactive Builder</span>
+                <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mt-2">Complete The Look Studio</h2>
+                <p class="text-brand-muted text-sm mt-2">Mix top couture, gravity trousers, and levitating footwear into your custom ensemble.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Selectors -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">1. Select Overcoat / Top</label>
+                        <div class="grid grid-cols-3 gap-3" id="topSelector"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">2. Select Trousers (Physics Pendulum)</label>
+                        <div class="grid grid-cols-3 gap-3" id="pantsSelector"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">3. Select Footwear (Levitating)</label>
+                        <div class="grid grid-cols-3 gap-3" id="shoesSelector"></div>
+                    </div>
+                </div>
+
+                <!-- Live Interactive Display Canvas -->
+                <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                    <div class="relative w-full max-w-md bg-brand-card border border-brand-accent/30 rounded-3xl p-8 shadow-2xl overflow-hidden flex flex-col items-center justify-center min-h-[480px]">
+                        
+                        <!-- Mannequin / Outfit Container -->
+                        <div class="relative w-64 h-80 flex flex-col items-center justify-between z-10 py-4">
+                            <!-- Top Garment -->
+                            <div id="studioTopPiece" class="w-36 h-32 transition-all duration-500 transform">
+                                <img id="studioTopImg" src="" alt="Top" class="w-full h-full object-contain filter drop-shadow-xl">
+                            </div>
+                            <!-- Pants (Swaying Physics) -->
+                            <div id="studioPantsPiece" class="w-32 h-36 -mt-6 transition-all duration-500 transform animate-pendulum origin-top">
+                                <img id="studioPantsImg" src="" alt="Pants" class="w-full h-full object-contain filter drop-shadow-xl">
+                            </div>
+                            <!-- Shoes (Levitating Physics) -->
+                            <div id="studioShoesPiece" class="w-28 h-16 -mt-2 transition-all duration-500 transform animate-float">
+                                <img id="studioShoesImg" src="" alt="Shoes" class="w-full h-full object-contain filter drop-shadow-xl">
+                            </div>
+                        </div>
+
+                        <!-- Studio Stats & Add to Bag -->
+                        <div class="w-full mt-6 pt-6 border-t border-brand-accent/20 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-brand-muted block">Ensemble Total</span>
+                                <span id="studioTotalPrice" class="font-cinzel text-2xl font-bold text-white">$0</span>
+                            </div>
+                            <button id="addStudioBundleBtn" class="px-6 py-3 bg-brand-accent text-white font-medium rounded-full hover:bg-brand-brown transition-all shadow-lg flex items-center gap-2">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add Complete Look
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Collection Grid -->
+    <section id="collections" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-accent">Curated Catalog</span>
+                <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mt-1">Haute Couture Collection</h2>
+            </div>
+            <div class="flex gap-2 bg-brand-card p-1 rounded-xl border border-brand-accent/20">
+                <button class="filter-btn active px-4 py-1.5 rounded-lg text-xs font-semibold transition-all" data-filter="all">All</button>
+                <button class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold text-brand-muted hover:text-white transition-all" data-filter="tops">Tops</button>
+                <button class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold text-brand-muted hover:text-white transition-all" data-filter="pants">Pants</button>
+                <button class="filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold text-brand-muted hover:text-white transition-all" data-filter="shoes">Shoes</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Product Cards Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+
+    <!-- Shopping Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
+        <div id="cartOverlay" class="absolute inset-0 bg-brand-dark/80 backdrop-blur-sm pointer-events-auto"></div>
+        <div class="absolute top-0 right-0 bottom-0 w-full max-w-md bg-brand-card shadow-2xl pointer-events-auto flex flex-col transform translate-x-full transition-transform duration-300 ease-out border-l border-brand-accent/20">
+            <div class="p-6 border-b border-brand-accent/20 flex items-center justify-between">
+                <h3 class="font-cinzel text-xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-accent"></i>
+                    Your Shopping Bag
+                </h3>
+                <button id="closeCartBtn" class="p-2 rounded-full hover:bg-brand-bg text-brand-muted hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+
+            <!-- Cart Summary Footer -->
+            <div class="p-6 border-t border-brand-accent/20 bg-brand-bg/60 space-y-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm text-brand-muted">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal" class="font-medium text-white">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-brand-muted">
+                        <span>Complimentary Express Shipping</span>
+                        <span class="text-brand-accent font-medium">Free</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-bold font-cinzel pt-2 border-t border-brand-accent/20 text-white">
+                        <span>Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                </div>
+                <button id="checkoutBtn" class="w-full py-4 bg-brand-accent text-white rounded-xl font-medium hover:bg-brand-brown transition-all shadow-xl flex items-center justify-center gap-2">
+                    Proceed to Checkout
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Product Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="modalOverlay" class="absolute inset-0 bg-brand-dark/80 backdrop-blur-md"></div>
+        <div class="relative bg-brand-card border border-brand-accent/30 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 transform scale-95 transition-transform duration-300">
+            <button id="closeModalBtn" class="absolute top-4 right-4 p-2 rounded-full bg-brand-bg text-brand-muted hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="modalContent" class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-card text-brand-muted py-16 border-t border-brand-accent/20 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+            <!-- Brand Info -->
+            <div class="space-y-4 md:col-span-1">
+                <h3 class="font-cinzel text-xl font-bold tracking-widest text-white">gs. Shopping</h3>
+                <p class="text-xs text-brand-muted leading-relaxed">
+                    High-fashion kinetic digital store combining gravity motion physics with luxury apparel.
+                </p>
+            </div>
+
+            <!-- Collections -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-accent font-cinzel">Collections</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#collections" class="hover:text-white transition-colors">Outerwear Jackets</a></li>
+                    <li><a href="#collections" class="hover:text-white transition-colors">Dynamic Trousers</a></li>
+                    <li><a href="#collections" class="hover:text-white transition-colors">Cyber Footwear</a></li>
+                </ul>
+            </div>
+
+            <!-- Technology -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-accent font-cinzel">Technology</h4>
+                <ul class="space-y-2 text-xs">
+                    <li class="hover:text-white transition-colors">GSAP ScrollTrigger</li>
+                    <li class="hover:text-white transition-colors">Three.js Kinetic Canvas</li>
+                    <li class="hover:text-white transition-colors">Physics Motion Engine</li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-accent font-cinzel">Newsletter</h4>
+                <p class="text-xs text-brand-muted">Subscribe for exclusive kinetic collection drops.</p>
+                <div class="flex items-center gap-2">
+                    <input type="email" placeholder="Your email..." class="bg-brand-bg border border-brand-accent/30 rounded-lg px-3 py-2 text-xs text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-accent flex-1">
+                    <button onclick="alert('Thank you for subscribing!')" class="px-4 py-2 bg-brand-accent text-white rounded-lg text-xs font-semibold hover:bg-brand-brown transition-all">Join</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-brand-accent/10 text-center text-xs text-brand-muted/60">
+            &copy; 2026 gs. Shopping. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- App Script -->
+    <script src="script.js"></script>
+</body>
+                  </html>
+  
