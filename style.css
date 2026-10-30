@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
-/* Smooth Scrolling & Custom Scrollbar */
 html {
     scroll-behavior: smooth;
 }
@@ -22,68 +21,62 @@ html {
     background: #93755A;
 }
 
-/* --- Typography & Kinetic Logo Glow --- */
 .font-cinzel {
     font-family: 'Cinzel', serif;
 }
 
-.brand-glow {
-    animation: logoGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes logoGlow {
+/* --- Ninja Kinetic Star Rotation --- */
+@keyframes ninjaSpin {
     0% {
-        text-shadow: 0 0 10px rgba(170, 145, 116, 0.2);
-    }
-    100% {
-        text-shadow: 0 0 25px rgba(170, 145, 116, 0.6), 0 0 10px rgba(212, 197, 185, 0.4);
-    }
-}
-
-/* Continuous Slow Spin Animation (ঘুরন্ত লোগোর জন্য) */
-@keyframes spinSlow {
-    from {
         transform: rotate(0deg);
     }
-    to {
+    100% {
         transform: rotate(360deg);
     }
 }
 
-.animate-spin-slow {
-    animation: spinSlow 18s linear infinite;
+.animate-ninja-spin {
+    animation: ninjaSpin 12s linear infinite;
+    transform-origin: center;
 }
 
-/* --- Advanced Kinetic & Gravity Animations --- */
-
-/* ১. কাপড় দোলার অ্যানিমেশন (Pendulum Sway) */
+/* --- Pendulum Sway Physics Animation --- */
 @keyframes pendulumSway {
     0%, 100% {
-        transform: rotate(-6deg) translateY(0);
+        transform: rotate(-8deg) translateY(0);
     }
     50% {
-        transform: rotate(6deg) translateY(4px);
+        transform: rotate(8deg) translateY(6px);
     }
 }
 
-/* ২. জুতা বা কাপড়ের ভাসমান অ্যানিমেশন (Levitation / Float) */
+.animate-pendulum {
+    animation: pendulumSway 3.8s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+/* --- Levitation Float Physics Animation --- */
 @keyframes float {
     0%, 100% {
         transform: translateY(0px) rotate(0deg);
     }
     50% {
-        transform: translateY(-14px) rotate(2deg);
+        transform: translateY(-12px) rotate(3deg);
     }
 }
 
-/* ৩. উপর থেকে নিচে ড্রপ বা পড়ার গ্র্যাভিটি অ্যানিমেশন (Gravity Garment Drop) */
+.animate-float {
+    animation: float 3.2s ease-in-out infinite;
+}
+
+/* --- Gravity Garment Drop Animation --- */
 @keyframes garmentDrop {
     0% {
-        transform: translateY(-80px) scale(0.85);
+        transform: translateY(-90px) scale(0.8);
         opacity: 0;
     }
-    60% {
-        transform: translateY(12px) scale(1.03);
+    65% {
+        transform: translateY(14px) scale(1.04);
         opacity: 1;
     }
     100% {
@@ -92,25 +85,15 @@ html {
     }
 }
 
-/* Animation Utility Classes */
-.animate-pendulum {
-    animation: pendulumSway 4s ease-in-out infinite;
-    transform-origin: top center;
-}
-
-.animate-float {
-    animation: float 3.5s ease-in-out infinite;
-}
-
 .animate-garment-drop {
-    animation: garmentDrop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: garmentDrop 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* Filter Button Active State Styling */
+/* Filter Button States */
 .filter-btn.active {
     background-color: #AA9174;
     color: #FFFFFF;
-    box-shadow: 0 4px 15px rgba(170, 145, 116, 0.3);
+    box-shadow: 0 4px 15px rgba(170, 145, 116, 0.35);
 }
 
 .filter-btn:not(.active) {
@@ -119,14 +102,6 @@ html {
 }
 
 .filter-btn:not(.active):hover {
-    background-color: rgba(170, 145, 116, 0.12);
+    background-color: rgba(170, 145, 116, 0.15);
     color: #FFFFFF;
-}
-
-/* Glassmorphism Accents */
-.glass-panel {
-    background: rgba(22, 19, 15, 0.8);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(170, 145, 116, 0.2);
 }
