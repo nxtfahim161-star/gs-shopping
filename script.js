@@ -1,6 +1,5 @@
-// --- GS. SHOPPING CORE JAVASCRIPT ---
+// --- GS. SHOPPING CORE JAVASCRIPT WITH LIVE SEARCH & ANIMATIONS ---
 
-// Product Database
 const products = [
     // Tops
     { id: 't1', name: 'Silk Draped Overcoat', category: 'tops', price: 480, image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80', desc: 'Hand-crafted Italian silk overcoat designed for fluid kinetic movement.' },
@@ -18,7 +17,6 @@ const products = [
     { id: 's3', name: 'Architectural Oxford Boots', category: 'shoes', price: 590, image: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=800&q=80', desc: 'Contemporary ankle boots with sculptural heels and supple leather finish.' }
 ];
 
-// App State
 let cart = [];
 let currentStudio = {
     top: products.find(p => p.category === 'tops'),
@@ -26,9 +24,7 @@ let currentStudio = {
     shoes: products.find(p => p.category === 'shoes')
 };
 
-// DOM Content Loaded Handler
 document.addEventListener('DOMContentLoaded', () => {
-    // Lucide Icons Initialization
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
@@ -40,9 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initModal();
     initHeroInteractions();
     initScrollAnimations();
+    initSearch();
 });
 
-// --- 1. Three.js Kinetic Ambient Background ---
+// --- Three.js Kinetic Ambient Background ---
 function initThreeBackground() {
     const canvas = document.getElementById('ambientCanvas');
     if (!canvas) return;
@@ -54,7 +51,6 @@ function initThreeBackground() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Create Floating Gold/Bronze Particles
     const particlesCount = 70;
     const posArray = new Float32Array(particlesCount * 3);
 
@@ -74,10 +70,8 @@ function initThreeBackground() {
 
     const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
     scene.add(particlesMesh);
-
     camera.position.z = 5;
 
-    // Mouse Parallax
     let mouseX = 0;
     let mouseY = 0;
     window.addEventListener('mousemove', (e) => {
@@ -85,7 +79,6 @@ function initThreeBackground() {
         mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
     });
 
-    // Animation Loop
     function animate() {
         requestAnimationFrame(animate);
         particlesMesh.rotation.y += 0.001;
@@ -106,7 +99,7 @@ function initThreeBackground() {
     });
 }
 
-// --- 2. Interactive Outfit Studio ---
+// --- Interactive Outfit Studio ---
 function initOutfitStudio() {
     renderStudioSelectors();
     updateStudioDisplay();
@@ -116,7 +109,6 @@ function initOutfitStudio() {
         bundle.forEach(item => addToCart(item, false));
         openCart();
         
-        // Trigger Confetti
         if (typeof confetti !== 'undefined') {
             confetti({
                 particleCount: 80,
@@ -159,10 +151,9 @@ function createStudioThumb(item, type) {
         renderStudioSelectors();
         updateStudioDisplay();
         
-        // Add drop animation feedback
         const pieceEl = document.getElementById(`studio${type.charAt(0).toUpperCase() + type.slice(1)}Piece`);
         pieceEl.classList.remove('animate-garment-drop');
-        void pieceEl.offsetWidth; // trigger reflow
+        void pieceEl.offsetWidth; 
         pieceEl.classList.add('animate-garment-drop');
     });
 
@@ -178,24 +169,22 @@ function updateStudioDisplay() {
     document.getElementById('studioTotalPrice').innerText = `$${totalPrice}`;
 }
 
-// --- 3. Product Catalog Grid & Filtering ---
-function initProductGrid() {
-    renderProducts('all');
-
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            renderProducts(e.target.getAttribute('data-filter'));
-        });
-    });
-}
-
-function renderProducts(filter) {
+// --- Product Catalog Grid & Filtering ---
+function initProductGrid(filter = 'all', searchQuery = '') {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
 
-    const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    let filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+
+    if (searchQuery.trim() !== '') {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query));
+    }
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-16 text-brand-muted font-cinzel text-lg">No matching couture pieces found.</div>`;
+        return;
+    }
 
     filtered.forEach(product => {
         const card = document.createElement('div');
@@ -203,18 +192,18 @@ function renderProducts(filter) {
         card.innerHTML = `
             <div class="relative aspect-[4/5] overflow-hidden cursor-pointer product-thumb" data-id="${product.id}">
                 <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                    <span class="text-white text-xs font-semibold tracking-wider uppercase bg-brand-dark/80 backdrop-blur-md px-3 py-1.5 rounded-full">Quick View</span>
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                    <span class="text-white text-xs font-semibold tracking-wider uppercase bg-brand-dark/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-brand-accent/30">Quick View</span>
                 </div>
             </div>
             <div class="p-6 flex flex-col justify-between flex-1 bg-brand-card">
                 <div>
                     <span class="text-[11px] font-bold uppercase tracking-widest text-brand-accent">${product.category}</span>
-                    <h3 class="font-cinzel text-xl font-bold text-brand-dark mt-1">${product.name}</h3>
+                    <h3 class="font-cinzel text-xl font-bold text-white mt-1">${product.name}</h3>
                 </div>
                 <div class="flex items-center justify-between mt-4 pt-4 border-t border-brand-accent/15">
-                    <span class="font-cinzel text-lg font-bold text-brand-dark">$${product.price}</span>
-                    <button class="add-to-cart-quick p-3 rounded-full bg-brand-dark text-white hover:bg-brand-accent transition-all transform hover:scale-105 active:scale-95 shadow-md" data-id="${product.id}">
+                    <span class="font-cinzel text-lg font-bold text-white">$${product.price}</span>
+                    <button class="add-to-cart-quick p-3 rounded-full bg-brand-accent text-white hover:bg-brand-brown transition-all transform hover:scale-105 active:scale-95 shadow-md" data-id="${product.id}">
                         <i data-lucide="shopping-bag" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -227,7 +216,6 @@ function renderProducts(filter) {
         lucide.createIcons();
     }
 
-    // Attach Click Events
     grid.querySelectorAll('.product-thumb').forEach(thumb => {
         thumb.addEventListener('click', () => openModal(thumb.getAttribute('data-id')));
     });
@@ -241,12 +229,29 @@ function renderProducts(filter) {
     });
 }
 
-// --- 4. Shopping Cart Drawer Logic ---
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        const activeFilterBtn = document.querySelector('.filter-btn.active');
+        const currentFilter = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
+        initProductGrid(currentFilter, e.target.value);
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            const query = searchInput.value;
+            initProductGrid(e.target.getAttribute('data-filter'), query);
+        });
+    });
+}
+
+// --- Shopping Cart Drawer Logic ---
 function initCartDrawer() {
     const cartBtn = document.getElementById('cartBtn');
     const closeCartBtn = document.getElementById('closeCartBtn');
     const cartOverlay = document.getElementById('cartOverlay');
-    const cartDrawer = document.getElementById('cartDrawer');
     const checkoutBtn = document.getElementById('checkoutBtn');
 
     cartBtn.addEventListener('click', openCart);
@@ -297,7 +302,6 @@ function updateCartUI() {
     const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-    // Badge Animation
     if (totalCount > 0) {
         badge.innerText = totalCount;
         badge.classList.remove('opacity-0', 'scale-0');
@@ -310,24 +314,24 @@ function updateCartUI() {
         container.innerHTML = `
             <div class="text-center py-16 text-brand-muted">
                 <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
-                <p class="font-cinzel text-lg">Your shopping bag is empty</p>
+                <p class="font-cinzel text-lg text-white">Your shopping bag is empty</p>
                 <p class="text-xs mt-1">Explore our haute couture catalog to begin.</p>
             </div>
         `;
     } else {
         cart.forEach(item => {
             const div = document.createElement('div');
-            div.className = 'flex items-center gap-4 bg-brand-card p-4 rounded-2xl border border-brand-accent/15';
+            div.className = 'flex items-center gap-4 bg-brand-bg p-4 rounded-2xl border border-brand-accent/15';
             div.innerHTML = `
                 <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-xl">
                 <div class="flex-1">
-                    <h4 class="font-cinzel font-bold text-sm text-brand-dark">${item.name}</h4>
+                    <h4 class="font-cinzel font-bold text-sm text-white">${item.name}</h4>
                     <span class="text-xs text-brand-muted">$${item.price} x ${item.qty}</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="decrease-qty w-7 h-7 rounded-full bg-brand-bg border border-brand-accent/30 text-xs font-bold" data-id="${item.id}">-</button>
-                    <span class="text-sm font-semibold">${item.qty}</span>
-                    <button class="increase-qty w-7 h-7 rounded-full bg-brand-bg border border-brand-accent/30 text-xs font-bold" data-id="${item.id}">+</button>
+                    <button class="decrease-qty w-7 h-7 rounded-full bg-brand-card border border-brand-accent/30 text-xs font-bold text-white">-</button>
+                    <span class="text-sm font-semibold text-white">${item.qty}</span>
+                    <button class="increase-qty w-7 h-7 rounded-full bg-brand-card border border-brand-accent/30 text-xs font-bold text-white">+</button>
                 </div>
             `;
             container.appendChild(div);
@@ -361,9 +365,8 @@ function updateCartUI() {
     }
 }
 
-// --- 5. Quick View Product Modal ---
+// --- Quick View Product Modal ---
 function initModal() {
-    const modal = document.getElementById('productModal');
     const overlay = document.getElementById('modalOverlay');
     const closeBtn = document.getElementById('closeModalBtn');
 
@@ -379,18 +382,18 @@ function openModal(productId) {
     const content = document.getElementById('modalContent');
 
     content.innerHTML = `
-        <div class="relative aspect-[4/5] rounded-2xl overflow-hidden bg-brand-card">
+        <div class="relative aspect-[4/5] rounded-2xl overflow-hidden bg-brand-bg">
             <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
         </div>
         <div class="space-y-4">
             <div>
                 <span class="text-xs font-bold uppercase tracking-widest text-brand-accent">${product.category}</span>
-                <h2 class="font-cinzel text-2xl font-bold text-brand-dark mt-1">${product.name}</h2>
+                <h2 class="font-cinzel text-2xl font-bold text-white mt-1">${product.name}</h2>
                 <p class="font-cinzel text-xl font-bold text-brand-accent mt-2">$${product.price}</p>
             </div>
             <p class="text-brand-muted text-sm leading-relaxed">${product.desc}</p>
             <div class="pt-4 border-t border-brand-accent/15 flex items-center gap-4">
-                <button id="modalAddToCart" class="flex-1 py-4 bg-brand-dark text-white rounded-xl font-medium hover:bg-brand-accent transition-all shadow-xl flex items-center justify-center gap-2">
+                <button id="modalAddToCart" class="flex-1 py-4 bg-brand-accent text-white rounded-xl font-medium hover:bg-brand-brown transition-all shadow-xl flex items-center justify-center gap-2">
                     <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Bag
                 </button>
             </div>
@@ -421,7 +424,7 @@ function closeModal() {
     }, 300);
 }
 
-// --- 6. Hero Garment Gravity Physics & GSAP Scroll ---
+// --- Hero Garment Gravity Physics & GSAP Scroll Animations ---
 function initHeroInteractions() {
     const heroGarment = document.getElementById('heroHeroGarment');
     heroGarment.addEventListener('click', () => {
@@ -454,7 +457,4 @@ function initScrollAnimations() {
             y: 30,
             opacity: 0,
             duration: 0.8,
-            ease: 'power3.out'
-        });
-    }
-     }
+            e
