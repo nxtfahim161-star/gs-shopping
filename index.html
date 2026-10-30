@@ -52,7 +52,7 @@
     <canvas id="ambientCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
 
     <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-bg/85 backdrop-blur-md border-b border-brand-accent/15 transition-all duration-300">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-bg/90 backdrop-blur-md border-b border-brand-accent/20 transition-all duration-300">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <div class="flex items-center gap-6">
                 <a href="#" class="font-cinzel text-xl sm:text-2xl font-black tracking-widest text-white flex items-center gap-1.5 brand-glow transition-all">
@@ -66,12 +66,12 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-brand-muted">
                         <i data-lucide="search" class="w-4 h-4"></i>
                     </span>
-                    <input type="text" id="searchInput" placeholder="Search kinetic couture, jackets, trousers..." class="w-full pl-10 pr-4 py-2 bg-brand-card border border-brand-accent/20 rounded-full text-sm text-white placeholder-brand-muted/60 focus:outline-none focus:border-brand-accent transition-all shadow-inner">
+                    <input type="text" id="searchInput" placeholder="Search kinetic couture, jackets, trousers..." class="w-full pl-10 pr-4 py-2 bg-brand-card border border-brand-accent/30 rounded-full text-sm text-white placeholder-brand-muted/60 focus:outline-none focus:border-brand-accent transition-all shadow-inner">
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <button id="cartBtn" class="relative p-2.5 rounded-full bg-brand-card hover:bg-brand-accent/20 text-white transition-all transform hover:scale-105 active:scale-95 border border-brand-accent/20">
+                <button id="cartBtn" class="relative p-2.5 rounded-full bg-brand-card hover:bg-brand-accent/20 text-white transition-all transform hover:scale-105 active:scale-95 border border-brand-accent/30">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                     <span id="cartBadge" class="absolute -top-1 -right-1 bg-brand-accent text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-0 transition-all duration-300 shadow-md">0</span>
                 </button>
@@ -79,11 +79,39 @@
         </nav>
     </header>
 
+    <!-- Promotional Discount Banner (Search Bar-এর নিচে) -->
+    <div class="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-20">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-card via-brand-accent/20 to-brand-card border border-brand-accent/30 p-4 sm:p-6 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 group">
+            <div class="flex items-center gap-4">
+                <span class="px-3 py-1.5 rounded-xl bg-brand-accent text-white font-bold text-xs uppercase tracking-wider animate-pulse shadow-lg">
+                    Limited Drop
+                </span>
+                <div>
+                    <h4 class="text-white font-cinzel font-bold text-sm sm:text-base">Exclusive Kinetic Collection Offer</h4>
+                    <p class="text-xs text-brand-muted">Get up to <span class="text-brand-accent font-bold">70% OFF</span> on Italian Silk Overcoats & Cyber Footwear</p>
+                </div>
+            </div>
+            
+            <!-- Deals Chips -->
+            <div class="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0">
+                <div class="px-3 py-1 rounded-full bg-brand-bg/80 border border-brand-accent/30 text-[11px] font-semibold text-brand-soft whitespace-nowrap">
+                    Tops: <span class="text-brand-accent font-bold">15% OFF</span>
+                </div>
+                <div class="px-3 py-1 rounded-full bg-brand-bg/80 border border-brand-accent/30 text-[11px] font-semibold text-brand-soft whitespace-nowrap">
+                    Pants: <span class="text-brand-accent font-bold">25% OFF</span>
+                </div>
+                <div class="px-3 py-1 rounded-full bg-brand-bg/80 border border-brand-accent/30 text-[11px] font-semibold text-brand-soft whitespace-nowrap">
+                    Footwear: <span class="text-brand-accent font-bold">70% OFF</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="relative min-h-screen pt-32 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center overflow-hidden">
+    <section class="relative min-h-screen pt-12 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center overflow-hidden">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
             <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-card border border-brand-accent/20 text-brand-muted text-xs font-semibold tracking-wide uppercase">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-card border border-brand-accent/30 text-brand-muted text-xs font-semibold tracking-wide uppercase shadow-md">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-accent"></i>
                     Interactive Couture Experience
                 </div>
@@ -106,13 +134,30 @@
             </div>
 
             <div class="lg:col-span-5 relative flex justify-center">
-                <div class="relative w-full max-w-md aspect-[3/4] rounded-3xl overflow-hidden bg-brand-card border border-brand-accent/20 shadow-2xl p-6 flex flex-col justify-between group">
+                <!-- Rotating Kinetic Badge (ঘুরন্ত লোগো) -->
+                <div class="absolute -top-8 -right-4 sm:-right-8 z-30 pointer-events-none">
+                    <div class="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center animate-spin-slow">
+                        <svg class="w-full h-full text-brand-accent opacity-80" viewBox="0 0 100 100">
+                            <path id="textPath" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+                            <text class="text-[9.5px] font-bold uppercase tracking-widest fill-brand-accent font-cinzel">
+                                <textPath href="#textPath">GS. SHOPPING • HAUTE COUTURE •</textPath>
+                            </text>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-full bg-brand-accent/20 border border-brand-accent flex items-center justify-center backdrop-blur-md">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-brand-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full max-w-md aspect-[3/4] rounded-3xl overflow-hidden bg-brand-card border border-brand-accent/30 shadow-2xl p-6 flex flex-col justify-between group">
                     <div id="heroHeroGarment" class="relative w-full h-full flex items-center justify-center cursor-pointer">
                         <img id="heroImage" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80" alt="High Couture" class="w-full h-full object-cover rounded-2xl shadow-inner transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent rounded-2xl"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent rounded-2xl"></div>
                         <div class="absolute bottom-6 left-6 right-6 text-white">
-                            <span class="text-xs uppercase tracking-widest text-brand-accent">Featured Piece</span>
-                            <h3 class="font-cinzel text-2xl font-bold">Silk Draped Overcoat</h3>
+                            <span class="text-xs uppercase tracking-widest text-brand-accent font-semibold">Featured Piece</span>
+                            <h3 class="font-cinzel text-2xl font-bold mt-0.5">Silk Draped Overcoat</h3>
                             <p class="text-sm font-light text-brand-muted mt-1">Tap image to trigger Garment Gravity Physics</p>
                         </div>
                     </div>
@@ -120,9 +165,8 @@
             </div>
         </div>
     </section>
-
-    <!-- Interactive Outfit Studio Section -->
-    <section id="studio" class="py-20 px-4 sm:px-6 lg:px-8 bg-brand-card/50 border-y border-brand-accent/10 relative">
+        <!-- Interactive Outfit Studio Section -->
+    <section id="studio" class="py-20 px-4 sm:px-6 lg:px-8 bg-brand-card/50 border-y border-brand-accent/20 relative">
         <div class="max-w-7xl mx-auto">
             <div class="text-center max-w-2xl mx-auto mb-12">
                 <span class="text-xs font-bold uppercase tracking-widest text-brand-accent">Interactive Builder</span>
@@ -151,7 +195,7 @@
 
                 <!-- Live Interactive Display Canvas -->
                 <div class="lg:col-span-7 flex flex-col items-center justify-center">
-                    <div class="relative w-full max-w-md bg-brand-card border border-brand-accent/20 rounded-3xl p-8 shadow-2xl overflow-hidden flex flex-col items-center justify-center min-h-[480px]">
+                    <div class="relative w-full max-w-md bg-brand-card border border-brand-accent/30 rounded-3xl p-8 shadow-2xl overflow-hidden flex flex-col items-center justify-center min-h-[480px]">
                         
                         <!-- Mannequin / Outfit Container -->
                         <div class="relative w-64 h-80 flex flex-col items-center justify-between z-10 py-4">
@@ -170,7 +214,7 @@
                         </div>
 
                         <!-- Studio Stats & Add to Bag -->
-                        <div class="w-full mt-6 pt-6 border-t border-brand-accent/15 flex items-center justify-between">
+                        <div class="w-full mt-6 pt-6 border-t border-brand-accent/20 flex items-center justify-between">
                             <div>
                                 <span class="text-xs text-brand-muted block">Ensemble Total</span>
                                 <span id="studioTotalPrice" class="font-cinzel text-2xl font-bold text-white">$0</span>
@@ -206,9 +250,9 @@
 
     <!-- Shopping Cart Drawer -->
     <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
-        <div id="cartOverlay" class="absolute inset-0 bg-brand-dark/70 backdrop-blur-sm pointer-events-auto"></div>
+        <div id="cartOverlay" class="absolute inset-0 bg-brand-dark/80 backdrop-blur-sm pointer-events-auto"></div>
         <div class="absolute top-0 right-0 bottom-0 w-full max-w-md bg-brand-card shadow-2xl pointer-events-auto flex flex-col transform translate-x-full transition-transform duration-300 ease-out border-l border-brand-accent/20">
-            <div class="p-6 border-b border-brand-accent/15 flex items-center justify-between">
+            <div class="p-6 border-b border-brand-accent/20 flex items-center justify-between">
                 <h3 class="font-cinzel text-xl font-bold text-white flex items-center gap-2">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-accent"></i>
                     Your Shopping Bag
@@ -222,7 +266,7 @@
             <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
 
             <!-- Cart Summary Footer -->
-            <div class="p-6 border-t border-brand-accent/15 bg-brand-bg/60 space-y-4">
+            <div class="p-6 border-t border-brand-accent/20 bg-brand-bg/60 space-y-4">
                 <div class="space-y-2">
                     <div class="flex justify-between text-sm text-brand-muted">
                         <span>Subtotal</span>
@@ -232,7 +276,7 @@
                         <span>Complimentary Express Shipping</span>
                         <span class="text-brand-accent font-medium">Free</span>
                     </div>
-                    <div class="flex justify-between text-lg font-bold font-cinzel pt-2 border-t border-brand-accent/15 text-white">
+                    <div class="flex justify-between text-lg font-bold font-cinzel pt-2 border-t border-brand-accent/20 text-white">
                         <span>Total</span>
                         <span id="cartTotal">$0.00</span>
                     </div>
@@ -247,8 +291,8 @@
 
     <!-- Quick View Product Modal -->
     <div id="productModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div id="modalOverlay" class="absolute inset-0 bg-brand-dark/70 backdrop-blur-md"></div>
-        <div class="relative bg-brand-card border border-brand-accent/20 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 transform scale-95 transition-transform duration-300">
+        <div id="modalOverlay" class="absolute inset-0 bg-brand-dark/80 backdrop-blur-md"></div>
+        <div class="relative bg-brand-card border border-brand-accent/30 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 transform scale-95 transition-transform duration-300">
             <button id="closeModalBtn" class="absolute top-4 right-4 p-2 rounded-full bg-brand-bg text-brand-muted hover:text-white transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
@@ -306,4 +350,5 @@
     <!-- App Script -->
     <script src="script.js"></script>
 </body>
-</html>
+                            </html>
+                            
